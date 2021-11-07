@@ -12,9 +12,10 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
-    
+
+    public static MainManager instance;
+
     private bool m_Started = false;
-    private int m_Points;
     
     private bool m_GameOver = false;
 
@@ -38,6 +39,11 @@ public class MainManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Update()
     {
         if (!m_Started)
@@ -57,15 +63,20 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(0);
+
+                MenuHandler.instance.score = 0;
+                MenuHandler.instance.startMenuButtons[0].SetActive(true);
+                MenuHandler.instance.startMenuButtons[1].SetActive(true);
+                MenuHandler.instance.startMenuButtons[2].SetActive(true);
             }
         }
     }
 
     void AddPoint(int point)
     {
-        m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        MenuHandler.instance.score += point;
+        ScoreText.text = $"Score : {MenuHandler.instance.score}";
     }
 
     public void GameOver()
